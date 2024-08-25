@@ -18,63 +18,52 @@ const PlantIdentifier = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
     setError(null);
 
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPreviewUrl(reader.result);
-      reader.readAsDataURL(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setLoading(true);
+
+      try {
+        const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const fileData = await readFileAsDataURL(file);
+
+        const imageParts = [
+          {
+            inlineData: {
+              data: fileData.split(',')[1],
+              mimeType: file.type
+            }
+          }
+        ];
+
+        const result = await model.generateContent([
+          "Identify this plant and provide the following information: Plant Name, Scientific Name, Origin, Brief Description, Care Instructions, and One Interesting Fact.",
+          ...imageParts
+        ]);
+
+        if (result.response) {
+          const text = await result.response.text(); // Await added here
+          console.log("AI response:", text);
+          const parsedInfo = parseAIResponse(text);
+          setPlantInfo(parsedInfo);
+        } else {
+          throw new Error("No response from AI model");
+        }
+      
+      } catch (error) {
+        console.error("Error identifying plant:", error);
+        setError(`Failed to identify the plant. Error: ${error.message}`);
+      } finally {
+        setLoading(false);
+      }
     } else {
       setPreviewUrl(null);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setError("Please select a file first.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-      const fileData = await readFileAsDataURL(selectedFile);
-
-      const imageParts = [
-        {
-          inlineData: {
-            data: fileData.split(',')[1],
-            mimeType: selectedFile.type
-          }
-        }
-      ];
-
-      const result = await model.generateContent([
-        "Identify this plant and provide the following information: Plant Name, Scientific Name, Origin, Brief Description, Care Instructions, and One Interesting Fact.",
-        ...imageParts
-      ]);
-
-      if (result.response) {
-        const text = await result.response.text(); // Await added here
-        console.log("AI response:", text);
-        const parsedInfo = parseAIResponse(text);
-        setPlantInfo(parsedInfo);
-      } else {
-        throw new Error("No response from AI model");
-      }
-    
-    } catch (error) {
-      console.error("Error identifying plant:", error);
-      setError(`Failed to identify the plant. Error: ${error.message}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -114,7 +103,7 @@ const PlantIdentifier = () => {
       ${origin}<br><br>
       ${description}
     `.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Replace **text** with <strong>text</strong>
-     .replace(/\*(.*?)\*/g, '<strong>$1</strong>'); // Replace *text* with <strong>text</strong>
+     .replace(/\*(.*?)\*/g, '<strong>$1</strong>');
   };
 
   return (
@@ -125,11 +114,17 @@ const PlantIdentifier = () => {
       </header>
 
       <div className="upload-section">
-        <input type="file" onChange={handleFileChange} accept="image/*" id="file-upload" className="file-input" />
-        <label htmlFor="file-upload" className="file-label">Choose an image</label>
-        <button onClick={handleUpload} disabled={!selectedFile || loading} className="identify-button">
-          {loading ? 'Identifying...' : 'Identify Plant'}
-        </button>
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept="image/*"
+          id="file-upload"
+          className="file-input"
+          disabled={loading}
+        />
+        <label htmlFor="file-upload" className="file-label">
+          {loading ? 'Identifying...' : 'Choose an image'}
+        </label>
       </div>
 
       {error && <p className="error">{error}</p>}
@@ -141,6 +136,6 @@ const PlantIdentifier = () => {
       )}
     </div>
   );
-}
+};
 
 export default PlantIdentifier;
