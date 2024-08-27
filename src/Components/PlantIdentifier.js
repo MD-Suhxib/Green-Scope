@@ -43,7 +43,7 @@ const PlantIdentifier = () => {
         ];
 
         const result = await model.generateContent([
-          "Identify this plant and provide the following information: Plant Name, Scientific Name, Origin, Brief Description, Care Instructions, and One Interesting Fact.",
+          "Identify Only this plant and provide the following information: Plant Name, Scientific Name, Origin, Brief Description, Care Instructions, and One Interesting Fact. Except plants any other thing appears then dont give the output as Not Available ",
           ...imageParts
         ]);
 
@@ -98,13 +98,16 @@ const PlantIdentifier = () => {
 
     // Combine the extracted information into a formatted string
     return `
-      ${plantName}<br><br>
-      ${scientificName}<br><br>
-      ${origin}<br><br>
-      ${description}
-    `.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Replace **text** with <strong>text</strong>
-     .replace(/\*(.*?)\*/g, '<strong>$1</strong>');
-  };
+  ${plantName}<br><br>
+  ${scientificName}<br><br>
+  ${origin}<br><br>
+  ${description}
+`
+  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Replace **text** with <strong>text</strong>
+  .replace(/\*(.*?)\*/g, '<strong>$1</strong>')      // Replace *text* with <strong>text</strong>
+  .replace(/#\s*(.*?)(?=<br>|$)/g, '<h2>$1</h2>');  
+  }// Replace #text with <h2>text</h2>
+
 
   return (
     <div className="plant-identifier">
