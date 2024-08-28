@@ -1,5 +1,6 @@
-/* Container Styling */
+/* Plant Identifier Container */
 .plant-identifier {
+  position: relative; /* Enable overlay positioning */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,6 +8,24 @@
   max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+  min-height: 100vh;
+  background-image: url('../Assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1; 
+}
+
+/* Background overlay for better readability */
+.plant-identifier::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.249); 
+  z-index: -1; 
 }
 
 /* Header Styling */
@@ -14,12 +33,14 @@ header h1 {
   font-size: 2rem;
   margin-bottom: 10px;
   text-align: center;
+  color: black;
 }
 
 header p {
   font-size: 1.2rem;
   text-align: center;
   margin-bottom: 20px;
+  color:black;
 }
 
 /* Upload Section Styling */
@@ -53,7 +74,7 @@ header p {
   cursor: not-allowed;
 }
 
-
+/* Image Preview Styling */
 .image-preview {
   width: 100%;
   max-width: 300px;
@@ -63,13 +84,13 @@ header p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
+/* Plant Info Styling */
 .plant-info {
   margin-top: 20px;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: rgba(255, 255, 255, 0.8); /* Slight transparency for better readability */
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.288);
   width: 100%;
   max-width: 600px;
   text-align: left;
@@ -78,7 +99,7 @@ header p {
   box-sizing: border-box;
 }
 
-
+/* Error Message Styling */
 .error {
   color: red;
   font-size: 1rem;
@@ -86,6 +107,8 @@ header p {
 }
 
 /* Responsive Design */
+
+/* Tablet and Small Desktop */
 @media (max-width: 768px) {
   header h1 {
     font-size: 1.8rem;
@@ -104,8 +127,17 @@ header p {
     font-size: 0.9rem;
     padding: 15px;
   }
+
+  .upload-section {
+    max-width: 300px;
+  }
+
+  .image-preview {
+    max-width: 100%;
+  }
 }
 
+/* Mobile Devices - 480px */
 @media (max-width: 480px) {
   header h1 {
     font-size: 1.5rem;
@@ -123,6 +155,97 @@ header p {
   .plant-info {
     font-size: 0.85rem;
     padding: 10px;
+  }
+
+  .upload-section {
+    max-width: 250px;
+  }
+
+  .image-preview {
+    max-width: 100%;
+  }
+}
+
+/* Mobile Devices - 425px */
+@media (max-width: 425px) {
+  header h1 {
+    font-size: 1.4rem;
+  }
+
+  header p {
+    font-size: 0.85rem;
+  }
+
+  .file-label {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+
+  .plant-info {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .upload-section {
+    max-width: 230px;
+  }
+
+  .image-preview {
+    max-width: 100%;
+  }
+}
+
+/* Mobile Devices - 375px */
+@media (max-width: 375px) {
+  header h1 {
+    font-size: 1.3rem;
+  }
+
+  header p {
+    font-size: 0.8rem;
+  }
+
+  .file-label {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+
+  .plant-info {
+    font-size: 0.75rem;
+    padding: 8px;
+  }
+
+  .upload-section {
+    max-width: 220px;
+  }
+
+  .image-preview {
+    max-width: 100%;
+  }
+}
+
+/* Mobile Devices - 325px */
+@media (max-width: 325px) {
+  header h1 {
+    font-size: 1.2rem;
+  }
+
+  header p {
+    font-size: 0.75rem;
+  }
+
+  .file-label {
+    font-size: 0.65rem;
+    padding: 5px 9px;
+  }
+
+  .plant-info {
+    font-size: 0.7rem;
+    padding: 6px;
+  }
+
+  .upload-section {
+    max-width: 200px;
   }
 
   .image-preview {

@@ -112,7 +112,7 @@ const PlantIdentifier = () => {
   return (
     <div className="plant-identifier">
       <header>
-        <h1>🌿 Plant Identifier</h1>
+        <h1>🌿 Plant Identifier By Picture </h1>
         <p>Upload an image of a plant to learn more about it!</p>
       </header>
 
