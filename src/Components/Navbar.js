@@ -21,6 +21,7 @@ const styles = {
     alignItems: "center",
     backgroundColor: "#177245",
     padding: "1rem",
+    flexWrap: "wrap", // This allows the navbar content to wrap when the screen size is smaller
   },
   logo: {
     color: "#fff",
@@ -37,6 +38,42 @@ const styles = {
     margin: "0 1rem",
     color: "#fff",
     cursor: "pointer",
+  },
+  // Media queries for responsiveness
+  "@media (max-width: 768px)": {
+    navLinks: {
+      flexDirection: "column",
+      alignItems: "center",
+      width: "100%",
+    },
+    navItem: {
+      margin: "0.5rem 0",
+    },
+  },
+  "@media (max-width: 425px)": {
+    logo: {
+      fontSize: "1.2rem",
+    },
+    navItem: {
+      fontSize: "0.9rem",
+    },
+  },
+  "@media (max-width: 375px)": {
+    logo: {
+      fontSize: "1rem",
+    },
+    navItem: {
+      fontSize: "0.8rem",
+      margin: "0.3rem 0",
+    },
+  },
+  "@media (max-width: 325px)": {
+    logo: {
+      fontSize: "0.9rem",
+    },
+    navItem: {
+      fontSize: "0.7rem",
+    },
   },
 };
 
