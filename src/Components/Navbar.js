@@ -1,80 +1,107 @@
-import React from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <nav style={styles.navbar}>
-      <div style={styles.logo}>Green-Scope</div>
-      <ul style={styles.navLinks}>
-        <li style={styles.navItem}>Home</li>
-        <li style={styles.navItem}>About</li>
-        <li style={styles.navItem}>Gallery</li>
-        <li style={styles.navItem}>Contact</li>
-      </ul>
-    </nav>
+    <Nav>
+      <Logo>Green-Scope</Logo>
+
+      {/* Menu Icon for Mobile View */}
+      <MenuIcon onClick={toggleMenu}>
+        <i className={`fas ${isMenuOpen ? "fa-times" : "fa-bars"}`}></i>
+      </MenuIcon>
+
+      {/* Navbar Links */}
+      <NavLinks $isMenuOpen={isMenuOpen}>
+  <NavItem>Home</NavItem>
+  <NavItem>About</NavItem>
+  <NavItem>Gallery</NavItem>
+  <NavItem>Contact</NavItem>
+</NavLinks>
+    </Nav>
   );
 };
 
-const styles = {
-  navbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#177245",
-    padding: "1rem",
-    flexWrap: "wrap", // This allows the navbar content to wrap when the screen size is smaller
-  },
-  logo: {
-    color: "#fff",
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-  },
-  navLinks: {
-    display: "flex",
-    listStyleType: "none",
-    margin: 0,
-    padding: 0,
-  },
-  navItem: {
-    margin: "0 1rem",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  // Media queries for responsiveness
-  "@media (max-width: 768px)": {
-    navLinks: {
-      flexDirection: "column",
-      alignItems: "center",
-      width: "100%",
-    },
-    navItem: {
-      margin: "0.5rem 0",
-    },
-  },
-  "@media (max-width: 425px)": {
-    logo: {
-      fontSize: "1.2rem",
-    },
-    navItem: {
-      fontSize: "0.9rem",
-    },
-  },
-  "@media (max-width: 375px)": {
-    logo: {
-      fontSize: "1rem",
-    },
-    navItem: {
-      fontSize: "0.8rem",
-      margin: "0.3rem 0",
-    },
-  },
-  "@media (max-width: 325px)": {
-    logo: {
-      fontSize: "0.9rem",
-    },
-    navItem: {
-      fontSize: "0.7rem",
-    },
-  },
-};
+const Nav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #177245;
+  padding: 1rem;
+  flex-wrap: wrap;
+`;
+
+const Logo = styled.div`
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  @media (max-width: 425px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 325px) {
+    font-size: 0.9rem;
+  }
+`;
+
+const MenuIcon = styled.div`
+  display: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const NavLinks = styled.ul`
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    display: ${({ $isMenuOpen }) => ($isMenuOpen ? "flex" : "none")};
+    background-color: #177245;
+    position: absolute;
+    top: 60px;
+    left: 0;
+  }
+`;
+
+const NavItem = styled.li`
+  margin: 0 1rem;
+  color: #fff;
+  cursor: pointer;
+
+  @media (max-width: 425px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 0.8rem;
+    margin: 0.3rem 0;
+  }
+
+  @media (max-width: 325px) {
+    font-size: 0.7rem;
+  }
+`;
 
 export default Navbar;
